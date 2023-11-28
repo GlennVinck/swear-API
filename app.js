@@ -8,6 +8,9 @@ const orderRouter = require("./routes/api/v1/orders");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost:27017/swear", {});
+
 const app = express();
 
 app.use(cors());
