@@ -114,11 +114,33 @@ const createOrder = async (req, res) => {
   }
 };
 
-const deleteOrder = (req, res) => {
-  res.json({
-    status: "success",
-    message: `Order with id ${req.params.id} deleted`,
-  });
+const deleteOrder = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const deletedOrder = await Order.findByIdAndDelete(orderId);
+
+    if (!deletedOrder) {
+      return res.status(404).json({
+        status: "error",
+        message: `Order with id ${orderId} not found`,
+      });
+    }
+
+    res.json({
+      status: "success",
+      message: `Order with id ${orderId} deleted`,
+      data: {
+        order: deletedOrder,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+      data: null,
+    });
+  }
 };
 
 const updateOrder = (req, res) => {
