@@ -53,15 +53,34 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-const getSingleOrder = (req, res) => {
-  let id = req.params.id;
-  res.json({
-    status: "success",
-    message: `Order with id ${id} retrieved`,
-    data: {
-      shoes: [],
-    },
-  });
+const getSingleOrder = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        status: "error",
+        message: `Order with id ${orderId} not found`,
+        data: null,
+      });
+    }
+
+    res.json({
+      status: "success",
+      message: `Order with id ${orderId} retrieved`,
+      data: {
+        order: order,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({
+      status: "error",
+      message: `Order with id ${orderId} not found`,
+      data: null,
+    });
+  }
 };
 
 const createOrder = async (req, res) => {
