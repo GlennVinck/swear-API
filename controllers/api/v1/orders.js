@@ -29,6 +29,11 @@ const orderSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  status: {
+    type: String,
+    enum: ["pending", "processing", "completed"],
+    default: "pending",
+  },
 });
 const Order = mongoose.model("Order", orderSchema);
 
@@ -93,6 +98,7 @@ const createOrder = async (req, res) => {
       image: req.body.image,
       quantity: req.body.quantity,
       orderDate: req.body.orderDate,
+      status: req.body.status,
     });
 
     const savedOrder = await order.save();
@@ -143,11 +149,39 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-const updateOrder = (req, res) => {
-  res.json({
-    status: "success",
-    message: `Order with id ${req.params.id} updated`,
-  });
+const updateOrder = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const { status } = req.body;
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { $set: { status: status } },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        status: "error",
+        message: `Order with id ${orderId} not found`,
+      });
+    }
+
+    res.json({
+      status: "success",
+      message: `Order with id ${orderId} updated`,
+      data: {
+        order: updatedOrder,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+      data: null,
+    });
+  }
 };
 
 module.exports.getAllOrders = getAllOrders;
