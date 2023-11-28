@@ -32,14 +32,25 @@ const orderSchema = new Schema({
 });
 const Order = mongoose.model("Order", orderSchema);
 
-const getAllOrders = (req, res) => {
-  res.json({
-    status: "success",
-    message: "All orders retrieved",
-    data: {
-      shoes: [],
-    },
-  });
+const getAllOrders = async (req, res) => {
+  try {
+    const allOrders = await Order.find();
+
+    res.json({
+      status: "success",
+      message: "All orders retrieved",
+      data: {
+        orders: allOrders,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+      data: null,
+    });
+  }
 };
 
 const getSingleOrder = (req, res) => {
