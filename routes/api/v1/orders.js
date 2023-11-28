@@ -4,7 +4,7 @@ const router = express.Router();
 router.get("/", function (req, res) {
   res.json({
     status: "success",
-    message: "All shoes retrieved",
+    message: "All orders retrieved",
     data: {
       shoes: [],
     },
@@ -15,7 +15,7 @@ router.get("/:id", function (req, res) {
   let id = req.params.id;
   res.json({
     status: "success",
-    message: `Shoe with id ${id} retrieved`,
+    message: `Order with id ${id} retrieved`,
     data: {
       shoes: [],
     },
@@ -25,7 +25,7 @@ router.get("/:id", function (req, res) {
 router.post("/", function (req, res) {
   res.json({
     status: "success",
-    message: "New shoe created",
+    message: "New oder created",
     data: {
       shoes: [],
     },
@@ -35,14 +35,14 @@ router.post("/", function (req, res) {
 router.delete("/:id", function (req, res) {
   res.json({
     status: "success",
-    message: `Shoe with id ${req.params.id} deleted`,
+    message: `Order with id ${req.params.id} deleted`,
   });
 });
 
 router.put("/:id", function (req, res) {
   res.json({
     status: "success",
-    message: `Shoe with id ${req.params.id} updated`,
+    message: `Order with id ${req.params.id} updated`,
   });
 });
 
