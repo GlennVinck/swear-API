@@ -8,8 +8,10 @@ const indexRouter = require("./routes/api/v1/index");
 const orderRouter = require("./routes/api/v1/orders");
 const usersRouter = require("./routes/api/v1/users");
 
+require("dotenv").config();
+
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/swear", {});
+mongoose.connect(process.env.MONGO_DB);
 
 const app = express();
 
