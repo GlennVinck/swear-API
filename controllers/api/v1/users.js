@@ -88,5 +88,43 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const updatePassword = async (req, res) => {
+  let userId = req.params.id;
+  let { password } = req.body;
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const updatedPassword = await User.findByIdAndUpdate(
+      userId,
+      { $set: { password: hashedPassword } },
+      { new: true }
+    );
+
+    if (!updatedPassword) {
+      return res.status(404).json({
+        status: "error",
+        message: `User with id ${userId} not found`,
+      });
+    }
+
+    res.json({
+      status: "success",
+      message: `Password from user with id ${userId} updated`,
+      data: {
+        user: updatedPassword.password,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
 module.exports.createUser = createUser;
 module.exports.deleteUser = deleteUser;
+module.exports.updatePassword = updatePassword;
