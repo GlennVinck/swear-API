@@ -29,6 +29,13 @@ const bcrypt = require("bcrypt");
 const saltRounds = 12;
 
 const createUser = async (req, res) => {
+  //{
+  //   "firstName": "Glenn",
+  //   "lastName": "Vinck",
+  //   "email": "vinck_glenn@hotmail.com",
+  //   "password": "1234"
+  //}
+
   let { firstName, lastName, email, password } = req.body;
 
   try {
@@ -60,4 +67,26 @@ const createUser = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+    res.json({
+      status: "success",
+      message: "User deleted",
+      data: {
+        user: deletedUser,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
 module.exports.createUser = createUser;
+module.exports.deleteUser = deleteUser;
