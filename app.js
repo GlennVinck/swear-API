@@ -4,9 +4,9 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 
+const indexRouter = require("./routes/api/v1/index");
 const orderRouter = require("./routes/api/v1/orders");
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const usersRouter = require("./routes/api/v1/users");
 
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost:27017/swear", {});
@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
 app.use("/api/v1/orders", orderRouter);
+app.use("/api/v1/users", usersRouter);
 
 module.exports = app;
