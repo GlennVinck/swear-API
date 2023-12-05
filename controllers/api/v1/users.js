@@ -25,15 +25,20 @@ const userSchema = new Schema({
 });
 const User = mongoose.model("User", userSchema);
 
+const bcrypt = require("bcrypt");
+const saltRounds = 12;
+
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password } = req.body;
 
   try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const newUser = new User({
       firstName,
       lastName,
       email,
-      password,
+      password: hashedPassword,
     });
 
     await newUser.save();
