@@ -20,7 +20,7 @@ const userSchema = new Schema({
   },
   admin: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 
