@@ -13,6 +13,8 @@ const createUser = async (req, res) => {
 
   let { firstName, lastName, email, password } = req.body;
 
+  console.log(req.body);
+
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
