@@ -1,5 +1,7 @@
 const User = require("../../../models/User");
 
+const jwt = require("jsonwebtoken");
+
 const bcrypt = require("bcrypt");
 const saltRounds = 12;
 
@@ -32,6 +34,65 @@ const createUser = async (req, res) => {
       message: "User created",
       data: {
         user: newUser,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
+const loginUser = async (req, res) => {
+  let { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      status: "error",
+      message: "Please provide an email and password",
+      data: null,
+    });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+        data: null,
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        status: "error",
+        message: "Invalid credentials",
+        data: null,
+      });
+    }
+
+    const payload = {
+      id: user._id,
+      email: user.email,
+      admin: user.admin,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.json({
+      status: "success",
+      message: "User logged in",
+      data: {
+        token,
       },
     });
   } catch (error) {
@@ -103,5 +164,6 @@ const updatePassword = async (req, res) => {
 };
 
 module.exports.createUser = createUser;
+module.exports.loginUser = loginUser;
 module.exports.deleteUser = deleteUser;
 module.exports.updatePassword = updatePassword;
