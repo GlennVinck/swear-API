@@ -52,7 +52,7 @@ const loginUser = async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({
       status: "error",
-      message: "Please provide an email and password",
+      message: "Please provide both an email and password",
       data: null,
     });
   }
@@ -73,7 +73,15 @@ const loginUser = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({
         status: "error",
-        message: "Invalid credentials",
+        message: "Password is incorrect",
+        data: null,
+      });
+    }
+
+    if (!user.admin) {
+      return res.status(403).json({
+        status: "error",
+        message: "Access forbidden. User is not an admin.",
         data: null,
       });
     }
@@ -82,11 +90,10 @@ const loginUser = async (req, res) => {
       id: user._id,
       email: user.email,
       admin: user.admin,
+      exp: Math.floor(Date.now() / 1000) + 60 * 60,
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
 
     res.json({
       status: "success",
@@ -94,6 +101,23 @@ const loginUser = async (req, res) => {
       data: {
         token,
       },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
+const logoutUser = (req, res) => {
+  try {
+    res.json({
+      status: "success",
+      message: "User logged out",
+      data: null,
     });
   } catch (error) {
     console.error(error);
@@ -165,5 +189,6 @@ const updatePassword = async (req, res) => {
 
 module.exports.createUser = createUser;
 module.exports.loginUser = loginUser;
+module.exports.logoutUser = logoutUser;
 module.exports.deleteUser = deleteUser;
 module.exports.updatePassword = updatePassword;
