@@ -55,12 +55,14 @@ const createOrder = async (req, res) => {
   try {
     const order = new Order({
       customerName: req.body.customerName,
-      shoeSize: req.body.shoeSize,
-      color: req.body.color,
-      price: req.body.price,
+      deliveryAdress: req.body.deliveryAdress,
+      email: req.body.email,
       image: req.body.image,
-      quantity: req.body.quantity,
       orderDate: req.body.orderDate,
+      orderNumber: req.body.orderNumber,
+      price: req.body.price,
+      quantity: req.body.quantity,
+      shoeSize: req.body.shoeSize,
       status: req.body.status,
     });
 
