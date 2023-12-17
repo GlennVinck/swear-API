@@ -7,8 +7,30 @@ const orderSchema = new Schema({
     required: true,
   },
   deliveryAdress: {
-    type: String,
-    required: true,
+    fullAdress: {
+      type: String,
+      required: true,
+    },
+    streetName: {
+      type: String,
+      required: true,
+    },
+    streetNumber: {
+      type: String,
+      required: true,
+    },
+    postalCode: {
+      type: String,
+      required: true,
+    },
+    shippingTo: {
+      type: String,
+      required: true,
+    },
+    shippingFrom: {
+      type: String,
+      required: true,
+    },
   },
   email : {
     type: String,
