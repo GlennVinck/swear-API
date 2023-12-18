@@ -54,7 +54,8 @@ const getSingleOrder = async (req, res) => {
 const createOrder = async (req, res) => {
   try {
     const order = new Order({
-      customerName: req.body.customerName,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       deliveryAdress: req.body.deliveryAdress,
       email: req.body.email,
       image: req.body.image,
