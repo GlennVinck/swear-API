@@ -11,7 +11,7 @@ const orderSchema = new Schema({
     required: true,
   },
   lastName: {
-    type: String, 
+    type: String,
     required: true,
   },
   deliveryAdress: {
@@ -40,7 +40,7 @@ const orderSchema = new Schema({
       required: true,
     },
   },
-  email : {
+  email: {
     type: String,
     required: true,
   },
@@ -70,8 +70,8 @@ const orderSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "processing", "completed"],
-    default: "pending",
+    enum: ["Pending", "In Progress", "Completed", "Cancelled"],
+    default: "Pending",
   },
 });
 
